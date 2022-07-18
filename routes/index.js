@@ -1,3 +1,4 @@
+const { query } = require('express');
 var express = require('express');
 var router = express.Router();
 const moment = require('moment')
@@ -20,7 +21,9 @@ router.get('/', (req,res)=>{
   const page = req.query.page ||1
   const offset = (page-1)*limit
   const wheres = []
-    console.log(req.query.date, 'ini tanggal')
+  const d2 = new Date(req.query.date2)
+  const d = new Date(req.query.date)
+
     //pencarian 
     if(req.query.id){
         wheres.push(`id = ${req.query.id}`)
@@ -47,15 +50,17 @@ router.get('/', (req,res)=>{
         
     }
     if(req.query.date && req.query.date2 ){
-        wheres.push(` lahir BETWEEN ${req.query.date} AND ${req.query.date2}`)
+        wheres.push(` lahir BETWEEN ${d} AND ${d2}`)
   
     }
      else if(req.query.date){
-        wheres.push(` lahir >${req.query.date}`)
+        wheres.push(` lahir > ${req.query.date}::text::date`)
         
 
     } else if(req.query.date2){
-        wheres.push(` lahir <${req.query.date2}`)
+      
+    
+        wheres.push(` lahir < ${d2}`)
         
     }
   let sql = "select count(*) as total from siswa "

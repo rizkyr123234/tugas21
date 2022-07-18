@@ -15,18 +15,65 @@ const client = new Client({
 client.connect()
 
 router.get('/', (req,res)=>{
+  const url = req.url == '/' ? '/?page=1' : req.url
   const limit = 2
   const page = req.query.page ||1
   const offset = (page-1)*limit
+  const wheres = []
+    console.log(req.query.date, 'ini tanggal')
+    //pencarian 
+    if(req.query.id){
+        wheres.push(`id = ${req.query.id}`)
+       
+    }
+    if (req.query.nama) {
+        wheres.push(`nama like '${req.query.nama}%' `) 
+        
+    }
+
+    if (req.query.tinggi) {
+        wheres.push(` tinggi = ${req.query.tinggi}`)
+      
+    }
+
+    if (req.query.berat) {
+        wheres.push(` berat =${req.query.berat} `)
+       
+    }
+
+    if (req.query.status && req.query.status !='pilih') {
+        const status = req.query.status == 'nikah'? true : false
+        wheres.push(` status=${status}`)
+        
+    }
+    if(req.query.date && req.query.date2 ){
+        wheres.push(` lahir BETWEEN ${req.query.date} AND ${req.query.date2}`)
   
+    }
+     else if(req.query.date){
+        wheres.push(` lahir >${req.query.date}`)
+        
+
+    } else if(req.query.date2){
+        wheres.push(` lahir <${req.query.date2}`)
+        
+    }
+  let sql = "select count(*) as total from siswa "
+  if(wheres.length>0){
+    sql+= ` WHERE ${wheres.join(' and ')}`
+  }
+   let sqlc = "select * from siswa"
+   if(wheres.length>0){
+    sqlc+=` WHERE ${wheres.join(' and ')}`
+   }
+   sqlc+=' LIMIT $1 OFFSET $2'
+   
+  client.query(sql)
+  .then(hasil=>Math.ceil(hasil.rows[0].total/limit))
+  .then(pages=>client.query(sqlc, [limit,offset])
+  .then(result=> res.render('menu',{hasil:result.rows,moment,pages,page,url
+  ,query:req.query})))
   
-  client.query("select count(*) as total from siswa")
-  .then(hasil=>hasil.rows[0].total/limit)
-  .then(pages=>client.query("select * from siswa LIMIT $1 OFFSET $2", [limit,offset])
-  .then(result=> res.render('menu',{hasil:result.rows,moment,pages,page})))
-  // client.query("select * from siswa")
-  // .then(result=> res.render('menu',{hasil:result.rows,moment,pages}))
-  // console.log(pages,'ini pagesnya')
   
 })
 

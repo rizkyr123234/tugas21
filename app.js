@@ -8,17 +8,8 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
-const moment = require('moment')
 
-// const {Client}= require('pg')
-// const client = new Client({
-//   user: "postgres",
-//   password: "12345",
-//   host: "localhost",
-//   port: "5432",
-//   database: "tugas21.db"
 
-// })
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

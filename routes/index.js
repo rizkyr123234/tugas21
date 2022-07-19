@@ -12,7 +12,6 @@ const client = new Client({
   database: "tugas21.db"
 
 })
-
 client.connect()
 
 router.get('/', (req,res)=>{
@@ -20,10 +19,7 @@ router.get('/', (req,res)=>{
   const limit = 2
   const page = req.query.page ||1
   const offset = (page-1)*limit
-  const wheres = []
-  const d2 = new Date(req.query.date2)
-  const d = new Date(req.query.date)
-
+  
     //pencarian 
     if(req.query.id){
         wheres.push(`id = ${req.query.id}`)
@@ -50,22 +46,23 @@ router.get('/', (req,res)=>{
         
     }
     if(req.query.date && req.query.date2 ){
-        wheres.push(` lahir BETWEEN ${d} AND ${d2}`)
+        wheres.push(`lahir BETWEEN '${req.query.date}' AND '${req.query.date2}'`)
   
     }
      else if(req.query.date){
-        wheres.push(` lahir > ${req.query.date}::text::date`)
+        wheres.push(`lahir >= '${req.query.date}'::date`)
         
 
     } else if(req.query.date2){
       
     
-        wheres.push(` lahir < ${d2}`)
+        wheres.push(`lahir <= '${req.query.date2}'::date`)
         
     }
   let sql = "select count(*) as total from siswa "
-  if(wheres.length>0){
+  if(wheres.length>0){ console.log(wheres,'iniwhere')
     sql+= ` WHERE ${wheres.join(' and ')}`
+    console.log(sql)
   }
    let sqlc = "select * from siswa"
    if(wheres.length>0){

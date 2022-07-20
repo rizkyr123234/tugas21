@@ -3,16 +3,7 @@ var express = require('express');
 var router = express.Router();
 const moment = require('moment')
 
-const {Client}= require('pg')
-const client = new Client({
-  user: "postgres",
-  password: "12345",
-  host: "localhost",
-  port: "5432",
-  database: "tugas21.db"
-
-})
-client.connect()
+module.exports= function (db){
 
 router.get('/', (req,res)=>{
   const sortBy=req.query.sortBy || 'id'
@@ -136,4 +127,5 @@ WHERE id =${id}`,
 
 })
 
-module.exports = router;
+return router;
+}

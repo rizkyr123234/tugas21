@@ -3,8 +3,16 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const {Client}= require('pg')
+const client = new Client({
+  user: "postgres",
+  password: "12345",
+  host: "localhost",
+  port: "5432",
+  database: "tugas21.db"
 
-var indexRouter = require('./routes/index');
+})
+var indexRouter = require('./routes/index')(client);
 var usersRouter = require('./routes/users');
 
 var app = express();

@@ -114,7 +114,7 @@ router.get('/delet/:id', (req, res) => {
 })
 router.get('/edit/:id',(req,res)=>{
   client.query("select * from siswa WHERE id = $1",[req.params.id])
-  .then(result=>res.render('edit',{item : result.rows[0].lahir}))
+  .then(result=>res.render('edit',{item : result.rows[0],moment}))
 })
 
 router.post('/edit/:id',(req,res)=>{

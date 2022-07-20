@@ -41,7 +41,7 @@ div {
             ID<input type="text" name="id" id="" value="<%=item.id%>" readonly> <br> 
             Nama <input type="text" name="nama" id="" value="<%=item.nama%>"> <br>
             Berat<input type="text" name="berat" id="" value="<%=item.berat%>"><br>
-            Lahir<input type='date' name="date" id="" value="<%=item.lahir%>"> <br>
+            Lahir<input type='date' name="date" id="" value="<%= moment(item.lahir).format('YYYY-MM-DD')%>"> <br>
             status<select name="status" id="" >
                 <option <%=item.status==true?"selected":null%>>menikah </option>
                 <option <%=item.status==false?"selected":null%>>jomblo</option>

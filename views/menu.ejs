@@ -8,6 +8,7 @@
     <title>list</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="/icon/css/all.css" rel="stylesheet">
         <style>
             .tambah{
                     background-color: blue;
@@ -75,6 +76,8 @@
     <h1> Cari Siswa</h1>
         <form action="" method="get">
             <input type="hidden" name="page" id="" value="1" >
+            <input type="hidden" name="sortBy" id="" value="id" >
+            <input type="hidden" name="sortMode" id="" value="asc" >
             ID <input type="text" name="id" id="" value="<%=query.id%>" placeholder="ID"> <br>
             Nama<input type="text" name="nama" id="" value="<%=query.nama%>" placeholder="nama"  > <br>
             berat<input type="text" name="berat" id="" value="<%=query.berat%>" placeholder=" berat(dgn angka)" >> <br>
@@ -94,11 +97,30 @@
 
         <head>
             <tr>
-                <th>ID</th>
-                <th>nama</th>
-                <th>berat</th>
-                <th>tinggi</th>
-                <th>lahir</th>
+                <th>
+                    <a href="<%=url.replace(`sortBy=${query.sortBy}`,`sortBy=id`).replace(`sortMode=${query.sortMode}`,`sortMode=${query.sortMode == 'asc' ?'desc':'asc'}`)%>">
+                    <i class="fa-solid fa-<%=query.sortBy== 'id' ? query.sortMode=='asc'?'sort-up':'sort-down':'sort'%>"></i>ID
+                </a>
+                </th>
+                <th>
+                    <a href="<%=url.replace(`sortBy=${query.sortBy}`,`sortBy=nama`).replace(`sortMode=${query.sortMode}`,`sortMode=${query.sortMode == 'asc' ?'desc':'asc'}`)%>">
+                    <i class="fa-solid fa-<%=query.sortBy== 'nama' ? query.sortMode=='asc'?'sort-up':'sort-down':'sort'%>"></i>nama
+                </a>
+                </th>
+                <th>
+                    <a href="<%=url.replace(`sortBy=${query.sortBy}`,`sortBy=berat`).replace(`sortMode=${query.sortMode}`,`sortMode=${query.sortMode == 'asc' ?'desc':'asc'}`)%>">
+                    <i class="fa-solid fa-<%=query.sortBy== 'berat' ? query.sortMode=='asc'?'sort-up':'sort-down':'sort'%>"></i>berat
+                </a>
+                </th>
+                <th>
+                    <a href="<%=url.replace(`sortBy=${query.sortBy}`,`sortBy=tinggi`).replace(`sortMode=${query.sortMode}`,`sortMode=${query.sortMode == 'asc' ?'desc':'asc'}`)%>">
+                    <i class="fa-solid fa-<%=query.sortBy== 'tinggi' ? query.sortMode=='asc'?'sort-up':'sort-down':'sort'%>"></i>tinggi
+                </a>
+                </th>
+                <th><a href="<%=url.replace(`sortBy=${query.sortBy}`,`sortBy=lahir`).replace(`sortMode=${query.sortMode}`,`sortMode=${query.sortMode == 'asc' ?'desc':'asc'}`)%>">
+                    <i class="fa-solid fa-<%=query.sortBy== 'lahir' ? query.sortMode=='asc'?'sort-up':'sort-down':'sort'%>"></i>lahir
+                </a>
+                </th>
                 <th>status</th>
                 <th>aksi</th>
             </tr>

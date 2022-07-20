@@ -15,11 +15,14 @@ const client = new Client({
 client.connect()
 
 router.get('/', (req,res)=>{
-  const url = req.url == '/' ? '/?page=1' : req.url
+  const sortBy=req.query.sortBy || 'id'
+  const sortMode=req.query.sortMode ||'asc'
+  const url = req.url == '/' ? '/?page=1&sortBy=id&sortMode=asc' : req.url
   const limit = 2
   const page = req.query.page ||1
   const offset = (page-1)*limit
   
+  let wheres = []
     //pencarian 
     if(req.query.id){
         wheres.push(`id = ${req.query.id}`)
@@ -60,7 +63,7 @@ router.get('/', (req,res)=>{
         
     }
   let sql = "select count(*) as total from siswa "
-  if(wheres.length>0){ console.log(wheres,'iniwhere')
+  if(wheres.length>0){ 
     sql+= ` WHERE ${wheres.join(' and ')}`
     console.log(sql)
   }
@@ -68,8 +71,10 @@ router.get('/', (req,res)=>{
    if(wheres.length>0){
     sqlc+=` WHERE ${wheres.join(' and ')}`
    }
-   sqlc+=' LIMIT $1 OFFSET $2'
-   
+   //sorting 
+    
+   sqlc+= ` ORDER BY ${sortBy} ${sortMode}`
+    sqlc+=' LIMIT $1 OFFSET $2'
   client.query(sql)
   .then(hasil=>Math.ceil(hasil.rows[0].total/limit))
   .then(pages=>client.query(sqlc, [limit,offset])
@@ -109,7 +114,7 @@ router.get('/delet/:id', (req, res) => {
 })
 router.get('/edit/:id',(req,res)=>{
   client.query("select * from siswa WHERE id = $1",[req.params.id])
-  .then(result=>res.render('edit',{item : result.rows[0],moment}))
+  .then(result=>res.render('edit',{item : result.rows[0].lahir}))
 })
 
 router.post('/edit/:id',(req,res)=>{
